@@ -3,6 +3,7 @@ import multer from 'multer';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { getFile } from './services/app.js';
 
 const app = express();
 const port = 3000;
@@ -30,8 +31,24 @@ app.post('/upload', upload.single('file'), (req, res) => {
   res.status(200).send(`File uploaded: ${req.file.originalname}`);
 });
 
-app.use(express.static(join(__dirname, '../public/ifc')));
+app.use(express.static(join(__dirname, 'src')));
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
+});
+
+app.get('/viewer/ifc/:filename', (req, res) => {
+  res.sendFile(join(__dirname, 'viewer.html'));
+});
+
+// Get data IFC
+app.get('/get/ifc/:filename', async (req, res) => {
+  const { filename } = req.params
+  try {
+    const fileData = await getFile(filename);
+    console.log(`${fileData}`)
+    res.send(fileData);
+  } catch (err) {
+    res.status(500).send('Error reading file: ' + err.message);
+  }
 });
