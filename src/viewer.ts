@@ -1,4 +1,3 @@
-import * as BUI from "@thatopen/ui";
 import * as OBC from "@thatopen/components";
 import * as WEBIFC from "web-ifc";
 
@@ -25,15 +24,6 @@ world.scene.setup();
 // Grid
 const grids = components.get(OBC.Grids);
 grids.create(world);
-
-// Stats (optional)
-// const stats = new Stats();
-// stats.showPanel(12);
-// document.body.append(stats.dom);
-// stats.dom.style.left = "0px";
-// stats.dom.style.zIndex = "unset";
-// world.renderer.onBeforeUpdate.add(() => stats.begin());
-// world.renderer.onAfterUpdate.add(() => stats.end());
 
 world.scene.three.background = null;
 
@@ -79,9 +69,8 @@ async function loadIfc(filename: String) {
     }
 
     const data = await response.arrayBuffer();
-    const buffer = new Uint8Array(data); // Ubah ke Uint8Array
-
-    // Muat model IFC
+    const buffer = new Uint8Array(data);
+    
     const model = await fragmentIfcLoader.load(buffer);
     world.scene.three.add(model);
 }
@@ -89,81 +78,3 @@ async function loadIfc(filename: String) {
 fragments.onFragmentsLoaded.add((model) => {
     console.log(model);
 });
-
-function download(file: File) {
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(file);
-    link.download = file.name;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-}
-
-async function exportFragments() {
-    if (!fragments.groups.size) {
-        return;
-    }
-    const group = Array.from(fragments.groups.values())[0];
-    const data = fragments.export(group);
-    download(new File([new Blob([data])], "small.frag"));
-
-    const properties = group.getLocalProperties();
-    if (properties) {
-        download(new File([JSON.stringify(properties)], "small.json"));
-    }
-}
-
-function disposeFragments() {
-    fragments.dispose();
-}
-
-// UI
-BUI.Manager.init();
-
-// const panel = BUI.Component.create<BUI.PanelSection>(() => {
-//     return BUI.html`
-//     <bim-panel active label="IFC Loader Tutorial" class="options-menu">
-//       <bim-panel-section collapsed label="Controls">
-//         <bim-panel-section style="padding-top: 12px; ">
-        
-//           <bim-button label="Load IFC"
-//             @click="${() => {
-//               loadIfc();
-//             }}">
-//           </bim-button>  
-              
-//           <bim-button label="Export fragments"
-//             @click="${() => {
-//               exportFragments();
-//             }}">
-//           </bim-button>  
-              
-//           <bim-button label="Dispose fragments"
-//             @click="${() => {
-//               disposeFragments();
-//             }}">
-//           </bim-button>
-        
-//         </bim-panel-section>
-        
-//       </bim-panel>
-//     `;
-//   });
-  
-//   document.body.append(panel);
-  
-//   const button = BUI.Component.create<BUI.PanelSection>(() => {
-//     return BUI.html`
-//         <bim-button class="phone-menu-toggler" icon="solar:settings-bold"
-//           @click="${() => {
-//             if (panel.classList.contains("options-menu-visible")) {
-//               panel.classList.remove("options-menu-visible");
-//             } else {
-//               panel.classList.add("options-menu-visible");
-//             }
-//           }}">
-//         </bim-button>
-//       `;
-//   });
-  
-//   document.body.append(button);

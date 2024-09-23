@@ -39,7 +39,8 @@ fileInput.addEventListener('change', async () => {
     console.log(result)
 
     const ifcLink = document.getElementById('ifc-link') as HTMLAnchorElement
-    // const ifcViewer = document.getElementById('ifc-viewer') as HTMLIFrameElement
+    const ifcIframe = document.getElementById('ifc-iframe') as HTMLIFrameElement
+    const ifcTextarea = document.getElementById('ifc-textarea') as HTMLTextAreaElement
 
     const fileURL = `http://localhost:5173/viewer/ifc/${file.name}`
 
@@ -50,8 +51,11 @@ fileInput.addEventListener('change', async () => {
       ifcLink.style.display = 'block'
       ifcLink.innerText = fileURL
 
-      // ifcViewer.src = fileURL
-      // ifcViewer.hidden = false
+      ifcIframe.src = fileURL
+      ifcIframe.style.display = 'block'
+
+      ifcTextarea.value = `<iframe id="ifc-iframe" src="${fileURL}" style="display: none; width: 600px; height: 400px; border: 1px solid #ccc;"></iframe>`
+      ifcTextarea.style.display = 'block'
     }
   }
 })
