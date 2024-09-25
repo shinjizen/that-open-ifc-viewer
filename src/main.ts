@@ -9,20 +9,6 @@ upload.addEventListener('click', () => {
 fileInput.addEventListener('change', async () => {
   const file = fileInput.files?.[0]
   if (file) {
-    // const fileReader = new FileReader();
-    // fileReader.readAsArrayBuffer(file);
-    // fileReader.onload = async (e) => {
-    //     const arrayBuffer = e.target?.result as ArrayBuffer
-    //     const uint8Array = new Uint8Array(arrayBuffer);
-
-    //     try {
-    //       const model = await fragmentIfcLoader.load(uint8Array)
-    //       world.scene.three.add(model);
-    //     } catch (err) {
-    //       console.error('Failed to load IFC file: ', err);
-    //     }
-    // };
-
     const formData = new FormData()
     formData.append('file', file)
 
